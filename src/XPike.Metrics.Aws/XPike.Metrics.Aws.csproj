@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../common.build.props"/>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <Description>xPike Metrics Provider for sending metrics to AWS CloudWatch.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.CloudWatch" Version="3.3.103.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XPike.Metrics\XPike.Metrics.csproj" />
+  </ItemGroup>
+
+</Project>

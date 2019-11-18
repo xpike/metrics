@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../common.build.props"/>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <Description>Abstractions for providing observability in software systems.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="XPike.Settings" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>

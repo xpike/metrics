@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../common.build.props" />
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <Description>xPike Metrics Provider for sending metrics to Azure Application Insights.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XPike.Metrics\XPike.Metrics.csproj" />
+  </ItemGroup>
+</Project>
