@@ -1,5 +1,7 @@
 ﻿using StatsdClient;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using XPike.Settings;
 
 namespace XPike.Metrics.DataDog
@@ -25,35 +27,35 @@ namespace XPike.Metrics.DataDog
             dog.TruncateIfTooLong = settings.Value.StatsdTruncateIfTooLong;
         }
 
-        public void Send<T>(MetricType metric, string name, T value, double sampleRate, params string[] tags)
+        public void Send<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags)
         {
             switch (metric)
             {
                 case MetricType.Counting:
-                    dog.Send<Statsd.Counting, T>(name, value, sampleRate, tags);
+                    dog.Send<Statsd.Counting, T>(name, value, sampleRate, tags.ToArray());
                     break;
                 case MetricType.Timing:
-                    dog.Send<Statsd.Timing, T>(name, value, sampleRate, tags);
+                    dog.Send<Statsd.Timing, T>(name, value, sampleRate, tags.ToArray());
                     break;
                 case MetricType.Gauge:
-                    dog.Send<Statsd.Gauge, T>(name, value, sampleRate, tags);
+                    dog.Send<Statsd.Gauge, T>(name, value, sampleRate, tags.ToArray());
                     break;
                 case MetricType.Histogram:
-                    dog.Send<Statsd.Histogram, T>(name, value, sampleRate, tags);
+                    dog.Send<Statsd.Histogram, T>(name, value, sampleRate, tags.ToArray());
                     break;
                 case MetricType.Distribution:
-                    dog.Send<Statsd.Distribution, T>(name, value, sampleRate, tags);
+                    dog.Send<Statsd.Distribution, T>(name, value, sampleRate, tags.ToArray());
                     break;
                 case MetricType.Meter:
-                    dog.Send<Statsd.Meter, T>(name, value, sampleRate, tags);
+                    dog.Send<Statsd.Meter, T>(name, value, sampleRate, tags.ToArray());
                     break;
                 case MetricType.Set:
-                    dog.Send<Statsd.Set, T>(name, value, sampleRate, tags);
+                    dog.Send<Statsd.Set, T>(name, value, sampleRate, tags.ToArray());
                     break;
             }
         }
 
-        public void Add<T>(MetricType metric, string name, T value, double sampleRate, params string[] tags)
+        public void Add<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags)
         {
             // The "buffering" in the DataDog client is not thread safe. It uses a List<string>.
             lock (semaphore)
@@ -61,25 +63,25 @@ namespace XPike.Metrics.DataDog
                 switch (metric)
                 {
                     case MetricType.Counting:
-                        dog.Add<Statsd.Counting, T>(name, value, sampleRate, tags);
+                        dog.Add<Statsd.Counting, T>(name, value, sampleRate, tags.ToArray());
                         break;
                     case MetricType.Timing:
-                        dog.Add<Statsd.Timing, T>(name, value, sampleRate, tags);
+                        dog.Add<Statsd.Timing, T>(name, value, sampleRate, tags.ToArray());
                         break;
                     case MetricType.Gauge:
-                        dog.Add<Statsd.Gauge, T>(name, value, sampleRate, tags);
+                        dog.Add<Statsd.Gauge, T>(name, value, sampleRate, tags.ToArray());
                         break;
                     case MetricType.Histogram:
-                        dog.Add<Statsd.Histogram, T>(name, value, sampleRate, tags);
+                        dog.Add<Statsd.Histogram, T>(name, value, sampleRate, tags.ToArray());
                         break;
                     case MetricType.Distribution:
-                        dog.Add<Statsd.Distribution, T>(name, value, sampleRate, tags);
+                        dog.Add<Statsd.Distribution, T>(name, value, sampleRate, tags.ToArray());
                         break;
                     case MetricType.Meter:
-                        dog.Add<Statsd.Meter, T>(name, value, sampleRate, tags);
+                        dog.Add<Statsd.Meter, T>(name, value, sampleRate, tags.ToArray());
                         break;
                     case MetricType.Set:
-                        dog.Add<Statsd.Set, T>(name, value, sampleRate, tags);
+                        dog.Add<Statsd.Set, T>(name, value, sampleRate, tags.ToArray());
                         break;
                 }
             }

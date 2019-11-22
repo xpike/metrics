@@ -34,7 +34,7 @@ namespace XPike.Metrics
         /// <param name="value">The value.</param>
         /// <param name="sampleRate">The sample rate.</param>
         /// <param name="tags">The tags.</param>
-        protected override void Send<T>(MetricType metric, string statName, T value, double sampleRate = 1, string[] tags = null)
+        protected override void Send<T>(MetricType metric, string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             Interlocked.Increment(ref count);
             if (count > maxMessagesPerPayload)

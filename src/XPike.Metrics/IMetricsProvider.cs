@@ -1,4 +1,6 @@
-﻿namespace XPike.Metrics
+﻿using System.Collections.Generic;
+
+namespace XPike.Metrics
 {
     public enum MetricType
     {
@@ -25,7 +27,7 @@
         /// <param name="value">The value.</param>
         /// <param name="sampleRate">The sample rate.</param>
         /// <param name="tags">The tags.</param>
-        void Send<T>(MetricType metric, string name, T value, double sampleRate, params string[] tags);
+        void Send<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags);
 
         /// <summary>
         /// Adds the specified metric to a buffered queue to be sent later.
@@ -36,7 +38,7 @@
         /// <param name="value">The value.</param>
         /// <param name="sampleRate">The sample rate.</param>
         /// <param name="tags">The tags.</param>
-        void Add<T>(MetricType metric, string name, T value, double sampleRate, params string[] tags);
+        void Add<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags);
 
         /// <summary>
         /// Sends queued metrics to the destination.

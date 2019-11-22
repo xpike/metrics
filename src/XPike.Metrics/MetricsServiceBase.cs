@@ -30,47 +30,47 @@ namespace XPike.Metrics
         /// <value>The metrics providers.</value>
         protected IEnumerable<IMetricsProvider> MetricsProviders { get; }
 
-        public void Counter<T>(string statName, T value, double sampleRate = 1, string[] tags = null)
+        public void Counter<T>(string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             PrepareAndSend<T>(MetricType.Counting, statName, value, sampleRate, tags);
         }
 
-        public void Decrement(string statName, int value = 1, double sampleRate = 1, params string[] tags)
+        public void Decrement(string statName, int value = 1, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             PrepareAndSend<int>(MetricType.Counting, statName, -value, sampleRate, tags);
         }
 
-        public void Distribution<T>(string statName, T value, double sampleRate = 1, string[] tags = null)
+        public void Distribution<T>(string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             PrepareAndSend<T>(MetricType.Distribution, statName, value, sampleRate, tags);
         }
 
-        public void Gauge<T>(string statName, T value, double sampleRate = 1, string[] tags = null)
+        public void Gauge<T>(string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             PrepareAndSend<T>(MetricType.Gauge, statName, value, sampleRate, tags);
         }
 
-        public void Histogram<T>(string statName, T value, double sampleRate = 1, string[] tags = null)
+        public void Histogram<T>(string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             PrepareAndSend<T>(MetricType.Histogram, statName, value, sampleRate, tags);
         }
 
-        public void Increment(string statName, int value = 1, double sampleRate = 1, string[] tags = null)
+        public void Increment(string statName, int value = 1, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             PrepareAndSend<int>(MetricType.Counting, statName, value, sampleRate, tags);
         }
 
-        public void Set<T>(string statName, T value, double sampleRate = 1, string[] tags = null)
+        public void Set<T>(string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             PrepareAndSend<T>(MetricType.Set, statName, value, sampleRate, tags);
         }
 
-        public IDisposable StartTimer(string statName, double sampleRate = 1, string[] tags = null)
+        public IDisposable StartTimer(string statName, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             return new MetricsTimer(this, statName, sampleRate, tags);
         }
 
-        public void Time(Action action, string statName, double sampleRate = 1, string[] tags = null)
+        public void Time(Action action, string statName, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             using (StartTimer(statName, sampleRate, tags))
             {
@@ -78,7 +78,7 @@ namespace XPike.Metrics
             }
         }
 
-        public T Time<T>(Func<T> func, string statName, double sampleRate = 1, string[] tags = null)
+        public T Time<T>(Func<T> func, string statName, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             using (StartTimer(statName, sampleRate, tags))
             {
@@ -86,12 +86,12 @@ namespace XPike.Metrics
             }
         }
 
-        public void Timer<T>(string statName, T value, double sampleRate = 1, string[] tags = null)
+        public void Timer<T>(string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             PrepareAndSend<T>(MetricType.Timing, statName, value, sampleRate, tags);
         }
 
-        private void PrepareAndSend<T>(MetricType metric, string statName, T value, double sampleRate = 1, string[] tags = null)
+        private void PrepareAndSend<T>(MetricType metric, string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             List<string> allTags = new List<string>();
             if (settings?.Value.ConstantTags != null && settings.Value.ConstantTags.Length > 0)
@@ -114,6 +114,6 @@ namespace XPike.Metrics
         /// <param name="value">The value.</param>
         /// <param name="sampleRate">The sample rate.</param>
         /// <param name="tags">The tags.</param>
-        protected abstract void Send<T>(MetricType metric, string statName, T value, double sampleRate = 1, string[] tags = null);
+        protected abstract void Send<T>(MetricType metric, string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null);
     }
 }

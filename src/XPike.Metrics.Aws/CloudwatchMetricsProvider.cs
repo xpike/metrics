@@ -3,6 +3,7 @@ using Amazon.CloudWatch.Model;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using XPike.Settings;
 
@@ -44,7 +45,7 @@ namespace XPike.Metrics.Aws
         /// <param name="value">The value.</param>
         /// <param name="sampleRate">The sample rate.</param>
         /// <param name="tags">The tags.</param>
-        public void Add<T>(MetricType metric, string name, T value, double sampleRate, params string[] tags)
+        public void Add<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags)
         {
             // We only want to lock on flush so we get concurrent adds. Locks are expensive. This will ensure we only 
             // take the hit when Flush() is sweeping to it's own local array.
@@ -93,7 +94,7 @@ namespace XPike.Metrics.Aws
         /// <param name="value">The value.</param>
         /// <param name="sampleRate">The sample rate.</param>
         /// <param name="tags">The tags.</param>
-        public void Send<T>(MetricType metric, string name, T value, double sampleRate, params string[] tags)
+        public void Send<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags)
         {
             var request = new PutMetricDataRequest {
                 Namespace = settings.Value.Prefix,
@@ -103,11 +104,11 @@ namespace XPike.Metrics.Aws
             cloudwatch.PutMetricDataAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
-        private List<Dimension> GetDimensions(string[] tags)
+        private List<Dimension> GetDimensions(IEnumerable<string> tags)
         {
             List<Dimension> dimensions = new List<Dimension>();
 
-            if (tags == null || tags.Length == 0)
+            if (tags == null || !tags.Any())
                 return dimensions;
 
             foreach(string tag in tags)
@@ -122,7 +123,7 @@ namespace XPike.Metrics.Aws
             return dimensions;
         }
 
-        private MetricDatum GetMetricDatum(MetricType metric, string name, object value, double sampleRate, params string[] tags)
+        private MetricDatum GetMetricDatum(MetricType metric, string name, object value, double sampleRate, IEnumerable<string> tags)
         {
             var metricData = new MetricDatum
             {

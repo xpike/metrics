@@ -2,6 +2,8 @@
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace XPike.Metrics.Azure
@@ -35,12 +37,12 @@ namespace XPike.Metrics.Azure
             this.telemetryClient = telemetryClient;
         }
 
-        public void Send<T>(MetricType metric, string name, T value, double sampleRate, params string[] tags)
+        public void Send<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags)
         {
             telemetryClient.TrackMetric(GetTelemetry(metric, name, value, sampleRate, tags));
         }
 
-        public void Add<T>(MetricType metric, string name, T value, double sampleRate, params string[] tags)
+        public void Add<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags)
         {
             // We only want to lock on flush so we get concurrent adds. Locks are expensive. This will ensure we only 
             // take the hit when Flush() is sweeping to it's own local array.
@@ -71,11 +73,11 @@ namespace XPike.Metrics.Azure
                 telemetryClient.TrackMetric(metric);
         }
 
-        private MetricTelemetry GetTelemetry(MetricType metric, string name, object value, double sampleRate, params string[] tags)
+        private MetricTelemetry GetTelemetry(MetricType metric, string name, object value, double sampleRate, IEnumerable<string> tags)
         {
             var telemetry = new MetricTelemetry(name, Convert.ToDouble(value));
 
-            if (tags == null || tags.Length == 0)
+            if (tags == null || !tags.Any())
                 return telemetry;
 
             foreach (string tag in tags)

@@ -15,7 +15,7 @@ namespace XPike.Metrics
         {
         }
 
-        protected override void Send<T>(MetricType metric, string statName, T value, double sampleRate = 1, string[] tags = null)
+        protected override void Send<T>(MetricType metric, string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             foreach (var provider in MetricsProviders)
                 provider.Send<T>(metric, statName, value, sampleRate, tags);

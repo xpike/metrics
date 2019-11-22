@@ -12,7 +12,7 @@ namespace XPike.Metrics
         private bool _disposed;
         private readonly double _sampleRate;
 
-        public MetricsTimer(IMetricsService metricsService, string name, double sampleRate = 1.0, string[] tags = null)
+        public MetricsTimer(IMetricsService metricsService, string name, double sampleRate = 1.0, IEnumerable<string> tags = null)
         {
             _name = name;
             _metricsService = metricsService;
