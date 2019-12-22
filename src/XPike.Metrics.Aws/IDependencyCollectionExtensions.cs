@@ -4,7 +4,7 @@ namespace XPike.Metrics.Aws
 {
     public static class IDependencyCollectionExtensions
     {
-        public static IDependencyCollection AddXPikeDataDogMetrics(this IDependencyCollection collection) =>
+        public static IDependencyCollection AddXPikeAwsMetrics(this IDependencyCollection collection) =>
             collection.LoadPackage(new XPike.Metrics.Aws.Package());
     }
 }
