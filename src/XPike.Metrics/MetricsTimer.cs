@@ -1,28 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace XPike.Metrics
 {
-    internal class MetricsTimer : IDisposable
+    public class MetricsTimer
+        : IMetricsTimer
     {
-        private readonly string _name;
-        private readonly IMetricsService _metricsService;
         private readonly Stopwatch _stopWatch;
         private bool _disposed;
-        private readonly double _sampleRate;
+
+        protected IMetricsService MetricsService { get; set; }
+
+        protected string Name { get; set; }
+        
+        protected double SampleRate { get; set; }
+
+        public IList<string> Tags { get; set; }
 
         public MetricsTimer(IMetricsService metricsService, string name, double sampleRate = 1.0, IEnumerable<string> tags = null)
         {
-            _name = name;
-            _metricsService = metricsService;
-            _sampleRate = sampleRate;
-            Tags = new List<string>();
+            Name = name;
+            MetricsService = metricsService;
+            SampleRate = sampleRate;
+
+            var tempTags = new List<string>();
             if (tags != null)
-                Tags.AddRange(tags);
+                tempTags.AddRange(tags);
+
+            Tags = tempTags;
 
             _stopWatch = Stopwatch.StartNew();
         }
+
+        protected virtual void RecordTiming(string name, long elapsedMs, double sampleRate, IEnumerable<string> tags) =>
+            MetricsService.Timer(name, elapsedMs, sampleRate, tags.ToArray());
 
         public void Dispose()
         {
@@ -31,10 +43,8 @@ namespace XPike.Metrics
                 _disposed = true;
                 _stopWatch.Stop();
 
-                _metricsService.Timer(_name, _stopWatch.ElapsedMilliseconds, _sampleRate, Tags.ToArray());
+                RecordTiming(Name, _stopWatch.ElapsedMilliseconds, SampleRate, Tags);
             }
         }
-
-        public List<string> Tags { get; set; }
     }
 }

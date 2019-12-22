@@ -2,17 +2,6 @@
 
 namespace XPike.Metrics
 {
-    public enum MetricType
-    {
-        Counting,
-        Timing,
-        Gauge,
-        Histogram,
-        Distribution,
-        Meter,
-        Set
-    }
-
     /// <summary>
     /// Interface implemented by all xPike metrics providers.
     /// </summary>

@@ -22,7 +22,9 @@ namespace XPike.Metrics
         
         void Set<T>(string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null);
         
-        IDisposable StartTimer(string name, double sampleRate = 1, IEnumerable<string> tags = null);
+        IMetricsTimer StartTimer(string name, double sampleRate = 1, IEnumerable<string> tags = null);
+
+        IOperationTracker StartTracker(string name, double sampleRate = 1, IEnumerable<string> tags = null);
         
         void Time(Action action, string statName, double sampleRate = 1, IEnumerable<string> tags = null);
         

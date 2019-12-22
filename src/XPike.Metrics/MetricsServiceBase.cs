@@ -65,9 +65,14 @@ namespace XPike.Metrics
             PrepareAndSend<T>(MetricType.Set, statName, value, sampleRate, tags);
         }
 
-        public IDisposable StartTimer(string statName, double sampleRate = 1, IEnumerable<string> tags = null)
+        public IMetricsTimer StartTimer(string statName, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             return new MetricsTimer(this, statName, sampleRate, tags);
+        }
+
+        public IOperationTracker StartTracker(string statName, double sampleRate = 1, IEnumerable<string> tags = null)
+        {
+            return new OperationTracker(this, statName, sampleRate, tags);
         }
 
         public void Time(Action action, string statName, double sampleRate = 1, IEnumerable<string> tags = null)
