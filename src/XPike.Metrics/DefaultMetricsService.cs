@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using XPike.Settings;
+using XPike.Configuration;
 
 namespace XPike.Metrics
 {
@@ -8,9 +8,11 @@ namespace XPike.Metrics
     /// Implements the <see cref="XPike.Metrics.MetricsServiceBase" />
     /// </summary>
     /// <seealso cref="XPike.Metrics.MetricsServiceBase" />
-    public class DefaultMetricsService : MetricsServiceBase
+    public class DefaultMetricsService
+        : MetricsServiceBase,
+          IDefaultMetricsService
     {
-        public DefaultMetricsService(ISettings<MetricsSettings> settings, IEnumerable<IMetricsProvider> metricsProviders) 
+        public DefaultMetricsService(IConfig<MetricsSettings> settings, IEnumerable<IMetricsProvider> metricsProviders) 
             : base(settings, metricsProviders)
         {
         }

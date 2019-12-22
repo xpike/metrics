@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using XPike.Settings;
+using XPike.Configuration;
 
 namespace XPike.Metrics
 {
@@ -11,14 +11,14 @@ namespace XPike.Metrics
     /// <seealso cref="XPike.Metrics.IMetricsService" />
     public abstract class MetricsServiceBase : IMetricsService
     {
-        ISettings<MetricsSettings> settings;
+        IConfig<MetricsSettings> settings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetricsServiceBase"/> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="metricsProviders">The metrics providers.</param>
-        public MetricsServiceBase(ISettings<MetricsSettings> settings, IEnumerable<IMetricsProvider> metricsProviders)
+        public MetricsServiceBase(IConfig<MetricsSettings> settings, IEnumerable<IMetricsProvider> metricsProviders)
         {
             this.settings = settings;
             MetricsProviders = metricsProviders;
@@ -94,13 +94,13 @@ namespace XPike.Metrics
         private void PrepareAndSend<T>(MetricType metric, string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
             List<string> allTags = new List<string>();
-            if (settings?.Value.ConstantTags != null && settings.Value.ConstantTags.Length > 0)
-                allTags.AddRange(settings.Value.ConstantTags);
+            if (settings?.CurrentValue.ConstantTags != null && settings.CurrentValue.ConstantTags.Length > 0)
+                allTags.AddRange(settings.CurrentValue.ConstantTags);
 
             if (tags != null)
                 allTags.AddRange(tags);
 
-            string name = $"{settings.Value.Prefix}.{statName}";
+            string name = $"{settings.CurrentValue.Prefix}.{statName}";
 
             Send<T>(metric, name, value, sampleRate, allTags.Count > 0 ? allTags.ToArray() : null);
         }

@@ -17,7 +17,8 @@ namespace XPike.Metrics.Azure
     /// telemetry client handle the batching and sampling.
     /// </remarks>
     /// <seealso cref="XPike.Metrics.IMetricsProvider" />
-    public class ApplicationInsightsMetricsProvider : IMetricsProvider
+    public class ApplicationInsightsMetricsProvider
+        : IApplicationInsightsMetricsProvider
     {
         TelemetryClient telemetryClient;
 

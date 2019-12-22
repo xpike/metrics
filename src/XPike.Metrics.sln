@@ -9,7 +9,28 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XPike.Metrics.Aws", "Xpike.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XPike.Metrics.DataDog", "Xpike.Metrics.DataDog\XPike.Metrics.DataDog.csproj", "{95E3158B-2588-46AB-BBAD-8F07EA1ACCD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPike.Metrics.Azure", "XPike.Metrics.Azure\XPike.Metrics.Azure.csproj", "{AFA6313B-85E3-40FE-A992-BD83C35292C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XPike.Metrics.Azure", "XPike.Metrics.Azure\XPike.Metrics.Azure.csproj", "{AFA6313B-85E3-40FE-A992-BD83C35292C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{3F557FD2-7C97-4077-8C6D-0B17E47B37D8}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+		..\azure-pipelines.yml = ..\azure-pipelines.yml
+		common.build.props = common.build.props
+		..\xpike-package-icon.png = ..\xpike-package-icon.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7F79E465-4011-445C-AC52-A35CDFBE799B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "README", "README", "{4FE10DAD-7A18-4384-84BD-551CB46DDDB2}"
+	ProjectSection(SolutionItems) = preProject
+		..\CHANGELOG.md = ..\CHANGELOG.md
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A2B5469B-E017-4C21-A579-59FC8E4A1105}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{C629EFBD-B177-4572-8C80-C419ABD1DF71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +93,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{475CF2E2-5122-4EAE-BB17-D6792812CDB7} = {7F79E465-4011-445C-AC52-A35CDFBE799B}
+		{07B7C65A-6752-4026-82A3-B0D93402F163} = {7F79E465-4011-445C-AC52-A35CDFBE799B}
+		{95E3158B-2588-46AB-BBAD-8F07EA1ACCD7} = {7F79E465-4011-445C-AC52-A35CDFBE799B}
+		{AFA6313B-85E3-40FE-A992-BD83C35292C0} = {7F79E465-4011-445C-AC52-A35CDFBE799B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EFE76694-4E6D-4261-AED5-4CFE3B11E7B7}

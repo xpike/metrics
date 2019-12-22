@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
-using XPike.Settings;
+using XPike.Configuration;
 
 namespace XPike.Metrics
 {
@@ -9,7 +9,9 @@ namespace XPike.Metrics
     /// Implements the <see cref="XPike.Metrics.MetricsServiceBase" />
     /// </summary>
     /// <seealso cref="XPike.Metrics.MetricsServiceBase" />
-    public class BufferedMetricsService : MetricsServiceBase
+    public class BufferedMetricsService
+        : MetricsServiceBase,
+          IBufferedMetricsService
     {
         private int count = 0;
         private int maxMessagesPerPayload;
@@ -19,10 +21,10 @@ namespace XPike.Metrics
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="metricsProviders">The metrics providers.</param>
-        public BufferedMetricsService(ISettings<MetricsSettings> settings, IEnumerable<IMetricsProvider> metricsProviders) 
+        public BufferedMetricsService(IConfig<MetricsSettings> settings, IEnumerable<IMetricsProvider> metricsProviders) 
             : base(settings, metricsProviders)
         {
-            maxMessagesPerPayload = settings.Value.MaxMessagesPerPayload;
+            maxMessagesPerPayload = settings.CurrentValue.MaxMessagesPerPayload;
         }
 
         /// <summary>

@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using XPike.Settings;
+using XPike.Configuration;
 
 namespace XPike.Metrics.DataDog
 {
-    public class DataDogMetricsProvider : IMetricsProvider, IDisposable
+    public class DataDogMetricsProvider
+        : IDataDogMetricsProvider
     {
         public const string DD_ENTITY_ID_ENV_VAR = "DD_ENTITY_ID";
         public const string DD_DOGSTATSD_PORT_ENV_VAR = "DD_DOGSTATSD_PORT";
@@ -17,14 +18,14 @@ namespace XPike.Metrics.DataDog
 
         private readonly object semaphore = new object();
 
-        public DataDogMetricsProvider(ISettings<DataDogProviderSettings> settings)
+        public DataDogMetricsProvider(IConfig<DataDogProviderSettings> settings)
         {
             if (settings == null)
                     throw new ArgumentNullException(nameof(settings));
 
-            statsdUDP = new StatsdUDP(settings.Value.StatsdServerName, settings.Value.StatsdPort, settings.Value.StatsdMaxUDPPacketSize);
+            statsdUDP = new StatsdUDP(settings.CurrentValue.StatsdServerName, settings.CurrentValue.StatsdPort, settings.CurrentValue.StatsdMaxUDPPacketSize);
             dog = new Statsd(statsdUDP);
-            dog.TruncateIfTooLong = settings.Value.StatsdTruncateIfTooLong;
+            dog.TruncateIfTooLong = settings.CurrentValue.StatsdTruncateIfTooLong;
         }
 
         public void Send<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags)

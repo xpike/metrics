@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using XPike.Settings;
+using XPike.Configuration;
 
 namespace XPike.Metrics.Aws
 {
@@ -14,10 +14,11 @@ namespace XPike.Metrics.Aws
     /// Implements the <see cref="XPike.Metrics.IMetricsProvider" />
     /// </summary>
     /// <seealso cref="XPike.Metrics.IMetricsProvider" />
-    public class CloudwatchMetricsProvider : IMetricsProvider, IDisposable
+    public class CloudwatchMetricsProvider
+        : ICloudwatchMetricsProvider
     {
         AmazonCloudWatchClient cloudwatch;
-        ISettings<MetricsSettings> settings;
+        IConfig<MetricsSettings> settings;
 
         // The only current collection with a Clear() method in Full Framework.
         ConcurrentStack<MetricDatum> queue = new ConcurrentStack<MetricDatum>();
@@ -30,7 +31,7 @@ namespace XPike.Metrics.Aws
         /// Initializes a new instance of the <see cref="CloudwatchMetricsProvider"/> class using the instance configured profile.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        public CloudwatchMetricsProvider(ISettings<MetricsSettings> settings)
+        public CloudwatchMetricsProvider(IConfig<MetricsSettings> settings)
         {
             this.settings = settings;
             cloudwatch = new AmazonCloudWatchClient();
@@ -78,7 +79,7 @@ namespace XPike.Metrics.Aws
 
             var request = new PutMetricDataRequest
             {
-                Namespace = settings.Value.Prefix,
+                Namespace = settings.CurrentValue.Prefix,
                 MetricData = new List<MetricDatum>(metrics) 
             };
 
@@ -97,7 +98,7 @@ namespace XPike.Metrics.Aws
         public void Send<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags)
         {
             var request = new PutMetricDataRequest {
-                Namespace = settings.Value.Prefix,
+                Namespace = settings.CurrentValue.Prefix,
                 MetricData = new List<MetricDatum> { { GetMetricDatum(metric, name, value, sampleRate, tags) } }
             };
 
@@ -129,7 +130,7 @@ namespace XPike.Metrics.Aws
             {
                 TimestampUtc = DateTime.UtcNow,
                 Dimensions = GetDimensions(tags),
-                MetricName = name.Remove(0, settings.Value.Prefix.Length + 1)
+                MetricName = name.Remove(0, settings.CurrentValue.Prefix.Length + 1)
             };
 
             switch(metric)

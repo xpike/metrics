@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace XPike.Metrics.DataDog
+﻿namespace XPike.Metrics.DataDog
 {
     public class DataDogProviderSettings
     {
