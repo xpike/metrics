@@ -8,6 +8,8 @@ namespace XPike.Metrics
     /// </summary>
     public interface IMetricsService
     {
+        void SetGlobalTag(string name, string value);
+
         void Counter<T>(string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null);
 
         void Decrement(string statName, int value = 1, double sampleRate = 1, IEnumerable<string> tags = null);

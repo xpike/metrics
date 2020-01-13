@@ -7,7 +7,7 @@ namespace XPike.Metrics
     public class MetricsTimer
         : IMetricsTimer
     {
-        private readonly Stopwatch _stopWatch;
+        protected readonly Stopwatch _stopWatch;
         private bool _disposed;
 
         protected IMetricsService MetricsService { get; set; }
@@ -33,7 +33,7 @@ namespace XPike.Metrics
             _stopWatch = Stopwatch.StartNew();
         }
 
-        protected virtual void RecordTiming(string name, long elapsedMs, double sampleRate, IEnumerable<string> tags) =>
+        protected virtual void RecordTiming(string name, double elapsedMs, double sampleRate, IEnumerable<string> tags) =>
             MetricsService.Timer(name, elapsedMs, sampleRate, tags.ToArray());
 
         public void Dispose()
@@ -43,7 +43,7 @@ namespace XPike.Metrics
                 _disposed = true;
                 _stopWatch.Stop();
 
-                RecordTiming(Name, _stopWatch.ElapsedMilliseconds, SampleRate, Tags);
+                RecordTiming(Name, _stopWatch.Elapsed.TotalMilliseconds, SampleRate, Tags);
             }
         }
     }

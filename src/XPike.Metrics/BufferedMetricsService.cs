@@ -19,12 +19,12 @@ namespace XPike.Metrics
         /// <summary>
         /// Initializes a new instance of the <see cref="BufferedMetricsService"/> class.
         /// </summary>
-        /// <param name="settings">The settings.</param>
+        /// <param name="config">The _config.</param>
         /// <param name="metricsProviders">The metrics providers.</param>
-        public BufferedMetricsService(IConfig<MetricsSettings> settings, IEnumerable<IMetricsProvider> metricsProviders) 
-            : base(settings, metricsProviders)
+        public BufferedMetricsService(IConfig<MetricsConfig> config, IEnumerable<IMetricsProvider> metricsProviders, IMetricsContextAccessor contextAccessor) 
+            : base(config, metricsProviders, contextAccessor)
         {
-            maxMessagesPerPayload = settings.CurrentValue.MaxMessagesPerPayload;
+            maxMessagesPerPayload = config.CurrentValue.MaxMessagesPerPayload;
         }
 
         /// <summary>

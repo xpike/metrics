@@ -18,14 +18,14 @@ namespace XPike.Metrics.DataDog
 
         private readonly object semaphore = new object();
 
-        public DataDogMetricsProvider(IConfig<DataDogProviderSettings> settings)
+        public DataDogMetricsProvider(IConfig<DataDogProviderConfig> config)
         {
-            if (settings == null)
-                    throw new ArgumentNullException(nameof(settings));
+            if (config == null)
+                    throw new ArgumentNullException(nameof(config));
 
-            statsdUDP = new StatsdUDP(settings.CurrentValue.StatsdServerName, settings.CurrentValue.StatsdPort, settings.CurrentValue.StatsdMaxUDPPacketSize);
+            statsdUDP = new StatsdUDP(config.CurrentValue.StatsdServerName, config.CurrentValue.StatsdPort, config.CurrentValue.StatsdMaxUDPPacketSize);
             dog = new Statsd(statsdUDP);
-            dog.TruncateIfTooLong = settings.CurrentValue.StatsdTruncateIfTooLong;
+            dog.TruncateIfTooLong = config.CurrentValue.StatsdTruncateIfTooLong;
         }
 
         public void Send<T>(MetricType metric, string name, T value, double sampleRate, IEnumerable<string> tags)

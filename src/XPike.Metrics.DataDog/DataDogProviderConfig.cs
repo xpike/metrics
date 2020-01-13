@@ -1,11 +1,11 @@
 ﻿namespace XPike.Metrics.DataDog
 {
-    public class DataDogProviderSettings
+    public class DataDogProviderConfig
     {
         public const int DefaultStatsdPort = 8125;
         public const int DefaultStatsdMaxUDPPacketSize = 512;
 
-        public DataDogProviderSettings()
+        public DataDogProviderConfig()
         {
             StatsdPort = DefaultStatsdPort;
             StatsdMaxUDPPacketSize = DefaultStatsdMaxUDPPacketSize;

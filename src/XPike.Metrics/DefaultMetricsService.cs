@@ -12,8 +12,8 @@ namespace XPike.Metrics
         : MetricsServiceBase,
           IDefaultMetricsService
     {
-        public DefaultMetricsService(IConfig<MetricsSettings> settings, IEnumerable<IMetricsProvider> metricsProviders) 
-            : base(settings, metricsProviders)
+        public DefaultMetricsService(IConfig<MetricsConfig> config, IEnumerable<IMetricsProvider> metricsProviders, IMetricsContextAccessor contextAccessor) 
+            : base(config, metricsProviders, contextAccessor)
         {
         }
 

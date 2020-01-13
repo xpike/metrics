@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using XPike.Configuration;
 
 namespace XPike.Metrics
@@ -11,16 +12,21 @@ namespace XPike.Metrics
     /// <seealso cref="XPike.Metrics.IMetricsService" />
     public abstract class MetricsServiceBase : IMetricsService
     {
-        IConfig<MetricsSettings> settings;
+        private readonly IConfig<MetricsConfig> _config;
+        private readonly IMetricsContextAccessor _contextAccessor;
+
+        private Dictionary<string, string> _globalTags = new Dictionary<string, string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetricsServiceBase"/> class.
         /// </summary>
-        /// <param name="settings">The settings.</param>
+        /// <param name="config">The _config.</param>
         /// <param name="metricsProviders">The metrics providers.</param>
-        public MetricsServiceBase(IConfig<MetricsSettings> settings, IEnumerable<IMetricsProvider> metricsProviders)
+        protected MetricsServiceBase(IConfig<MetricsConfig> config, IEnumerable<IMetricsProvider> metricsProviders, IMetricsContextAccessor contextAccessor)
         {
-            this.settings = settings;
+            _config = config;
+            _contextAccessor = contextAccessor;
+
             MetricsProviders = metricsProviders;
         }
 
@@ -29,6 +35,11 @@ namespace XPike.Metrics
         /// </summary>
         /// <value>The metrics providers.</value>
         protected IEnumerable<IMetricsProvider> MetricsProviders { get; }
+
+        public void SetGlobalTag(string name, string value)
+        {
+            _globalTags[name] = value;
+        }
 
         public void Counter<T>(string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
@@ -72,7 +83,14 @@ namespace XPike.Metrics
 
         public IOperationTracker StartTracker(string statName, double sampleRate = 1, IEnumerable<string> tags = null)
         {
-            return new OperationTracker(this, statName, sampleRate, tags);
+            var config = _config.CurrentValue;
+            return new OperationTracker(this,
+                statName,
+                sampleRate,
+                tags,
+                config.TrackTiming,
+                config.TrackAttempts,
+                config.TrackResults);
         }
 
         public void Time(Action action, string statName, double sampleRate = 1, IEnumerable<string> tags = null)
@@ -98,16 +116,9 @@ namespace XPike.Metrics
 
         private void PrepareAndSend<T>(MetricType metric, string statName, T value, double sampleRate = 1, IEnumerable<string> tags = null)
         {
-            List<string> allTags = new List<string>();
-            if (settings?.CurrentValue.ConstantTags != null && settings.CurrentValue.ConstantTags.Length > 0)
-                allTags.AddRange(settings.CurrentValue.ConstantTags);
+            string name = $"{_config.CurrentValue.Prefix}.{statName}";
 
-            if (tags != null)
-                allTags.AddRange(tags);
-
-            string name = $"{settings.CurrentValue.Prefix}.{statName}";
-
-            Send<T>(metric, name, value, sampleRate, allTags.Count > 0 ? allTags.ToArray() : null);
+            Send<T>(metric, name, value, sampleRate, _contextAccessor.MetricsContext.Tags.Union(tags));
         }
 
         /// <summary>

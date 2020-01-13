@@ -18,7 +18,7 @@ namespace XPike.Metrics.Aws
         : ICloudwatchMetricsProvider
     {
         AmazonCloudWatchClient cloudwatch;
-        IConfig<MetricsSettings> settings;
+        IConfig<MetricsConfig> settings;
 
         // The only current collection with a Clear() method in Full Framework.
         ConcurrentStack<MetricDatum> queue = new ConcurrentStack<MetricDatum>();
@@ -31,7 +31,7 @@ namespace XPike.Metrics.Aws
         /// Initializes a new instance of the <see cref="CloudwatchMetricsProvider"/> class using the instance configured profile.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        public CloudwatchMetricsProvider(IConfig<MetricsSettings> settings)
+        public CloudwatchMetricsProvider(IConfig<MetricsConfig> settings)
         {
             this.settings = settings;
             cloudwatch = new AmazonCloudWatchClient();

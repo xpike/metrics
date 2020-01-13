@@ -7,8 +7,8 @@
 
         string Result { get; set; }
         
-        void SetSuccess(string result = "success");
+        void SetSuccess(string result = "success", bool stopTimer = false);
         
-        void SetFailure(string result = "failure");
+        void SetFailure(string result = "failure", bool stopTimer = false);
     }
 }
