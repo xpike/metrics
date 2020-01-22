@@ -8,14 +8,15 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="XPike.Configuration.Microsoft.AspNetCore" Version="1.2.1" />
-    <PackageReference Include="XPike.IoC.SimpleInjector.AspNetCore" Version="1.0.3" />
-    <PackageReference Include="XPike.IoC.Microsoft.AspNetCore" Version="1.0.3" />
-    <PackageReference Include="XPike.Logging.Microsoft.AspNetCore" Version="1.2.2" />
+    <PackageReference Include="XPike.Configuration.Microsoft.AspNetCore" Version="1.3.1" />
+    <PackageReference Include="XPike.IoC.SimpleInjector.AspNetCore" Version="1.1.2" />
+    <PackageReference Include="XPike.IoC.Microsoft.AspNetCore" Version="1.1.2" />
+    <PackageReference Include="XPike.Logging.Microsoft.AspNetCore" Version="1.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Xpike.Metrics.DataDog\XPike.Metrics.DataDog.csproj" />
+    <ProjectReference Include="..\..\..\src\XPike.Metrics.Microsoft\XPike.Metrics.Microsoft.csproj" />
   </ItemGroup>
 
 </Project>

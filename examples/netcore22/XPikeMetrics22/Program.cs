@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Memory;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using XPike.Configuration.Microsoft.AspNetCore;
+using XPike.IoC.Microsoft.AspNetCore;
 using XPike.Logging.Microsoft.AspNetCore;
+using XPike.Metrics;
+using XPike.Metrics.DataDog;
+using XPike.Metrics.Microsoft;
 
 namespace XPikeMetrics22
 {
@@ -23,8 +18,12 @@ namespace XPikeMetrics22
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseXPikeConfiguration()
                 .UseXPikeLogging()
                 .UseStartup<Startup>()
-                .AddXPikeConfiguration(config => { });
+                .AddXPikeDependencyInjection()
+                .AddXPikeMetrics(collection =>
+                    collection.AddXPikeDataDogMetrics()
+                        .AddXPikeConsoleMetrics());
     }
 }

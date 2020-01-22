@@ -40,5 +40,7 @@ namespace XPike.Metrics
         /// Controls if OperationTracker records an independent metric for the elapsed time.
         /// </summary>
         public bool TrackTiming { get; set; }
+
+        public bool EnableRequestMetrics { get; set; }
     }
 }

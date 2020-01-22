@@ -1,5 +1,10 @@
 # Change Log
 
+## [2.4.1]
+
+- Added extension methods for easier setup, similar to IoC/Configuration/Logging
+- Added request metrics middleware
+
 ## [2.4.0]
 
 - Improvements to `OperationTracker`
