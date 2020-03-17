@@ -85,6 +85,7 @@ namespace XPike.Metrics
         {
             var config = _config.CurrentValue;
             return new OperationTracker(this,
+                _contextAccessor,
                 statName,
                 sampleRate,
                 tags,

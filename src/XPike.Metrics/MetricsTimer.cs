@@ -12,7 +12,7 @@ namespace XPike.Metrics
 
         protected IMetricsService MetricsService { get; set; }
 
-        protected string Name { get; set; }
+        public string Name { get; protected set; }
         
         protected double SampleRate { get; set; }
 

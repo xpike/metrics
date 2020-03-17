@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using XPike.Metrics;
+using XPike.Metrics.Microsoft;
 
 namespace XPikeMetrics22.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class ValuesController : MetricsControllerBase
     {
         private readonly IMetricsService _metricsService;
+        private readonly IMetricsContextAccessor _contextAccessor;
 
-        public ValuesController(IMetricsService metricsService)
+        public ValuesController(IMetricsService metricsService, IMetricsContextAccessor contextAccessor)
+            : base(metricsService, contextAccessor)
         {
             _metricsService = metricsService;
+            _contextAccessor = contextAccessor;
         }
 
         // GET api/values
@@ -32,8 +34,17 @@ namespace XPikeMetrics22.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public Task<ActionResult<string>> Get(int id) =>
+            WithTimingAsync(tracker => HandleGetAsync(id, tracker));
+
+        private async Task<ActionResult<string>> HandleGetAsync(int id, IOperationTracker tracker)
         {
+            if (tracker == null)
+                tracker = _contextAccessor.OperationTracker ?? tracker;
+
+            _contextAccessor.MetricsContext.AddTag("test", "tag");
+            tracker.SetSuccess("testing");
+            await Task.Delay(500);
             return "value";
         }
 
