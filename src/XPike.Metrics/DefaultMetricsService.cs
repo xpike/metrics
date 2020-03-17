@@ -4,7 +4,7 @@ using XPike.Configuration;
 namespace XPike.Metrics
 {
     /// <summary>
-    /// A default implemenation of IMetricsService that sends metrics to providers synchronously.
+    /// A default implementation of IMetricsService that sends metrics to providers synchronously.
     /// Implements the <see cref="XPike.Metrics.MetricsServiceBase" />
     /// </summary>
     /// <seealso cref="XPike.Metrics.MetricsServiceBase" />

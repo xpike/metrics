@@ -10,13 +10,15 @@ namespace XPike.Metrics.Microsoft
     {
         private readonly RequestDelegate _next;
         private readonly IMetricsService _metricsService;
+        private readonly IMetricsContextAccessor _contextAccessor;
         private readonly IConfig<MetricsConfig> _config;
 
-        public RequestMetricsMiddleware(RequestDelegate next, IMetricsService metricsService, IConfig<MetricsConfig> config)
+        public RequestMetricsMiddleware(RequestDelegate next, IMetricsService metricsService, IConfig<MetricsConfig> config, IMetricsContextAccessor contextAccessor)
         {
             _next = next;
             _metricsService = metricsService;
             _config = config;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task Invoke(HttpContext context)
@@ -25,6 +27,17 @@ namespace XPike.Metrics.Microsoft
             {
                 await _next(context);
                 return;
+            }
+
+            try
+            {
+                // NOTE: It's important to attempt to acquire the context here, otherwise
+                // tags applied by controller logic will not be added to the timing metric.
+                var metricsContext = _contextAccessor.MetricsContext;
+            }
+            catch (Exception)
+            {
+                // Intentional no-op.
             }
 
             using (var tracker = _metricsService.StartTracker("request", tags:

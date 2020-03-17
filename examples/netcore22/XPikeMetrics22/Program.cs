@@ -18,12 +18,12 @@ namespace XPikeMetrics22
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .AddXPikeMetrics(collection =>
+                    collection.AddXPikeDataDogMetrics()
+                        .AddXPikeConsoleMetrics())
                 .UseXPikeConfiguration()
                 .UseXPikeLogging()
                 .UseStartup<Startup>()
-                .AddXPikeDependencyInjection()
-                .AddXPikeMetrics(collection =>
-                    collection.AddXPikeDataDogMetrics()
-                        .AddXPikeConsoleMetrics());
+                .AddXPikeDependencyInjection();
     }
 }

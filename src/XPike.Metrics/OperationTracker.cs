@@ -6,6 +6,8 @@ namespace XPike.Metrics
         : MetricsTimer,
           IOperationTracker
     {
+        private readonly IMetricsContextAccessor _contextAccessor;
+
         private readonly bool _recordTiming;
         private readonly bool _recordAttempt;
         private readonly bool _recordResult;
@@ -15,6 +17,7 @@ namespace XPike.Metrics
         public string Result { get; set; }
         
         public OperationTracker(IMetricsService metricsService,
+            IMetricsContextAccessor contextAccessor,
             string name,
             double sampleRate = 1D,
             IEnumerable<string> tags = null,
@@ -23,9 +26,13 @@ namespace XPike.Metrics
             bool recordResult = false)
             : base(metricsService, name, sampleRate, tags)
         {
+            _contextAccessor = contextAccessor;
+
             _recordTiming = recordTiming;
             _recordAttempt = recordAttempt;
             _recordResult = recordResult;
+
+            _contextAccessor.AddTracker(this);
         }
 
         public void SetSuccess(string result = "success", bool stopTimer = false)
@@ -59,6 +66,8 @@ namespace XPike.Metrics
 
             if (_recordTiming)
                 base.RecordTiming($"{name}.timing", elapsedMs, sampleRate, Tags);
+
+            _contextAccessor.RemoveTracker();
         }
     }
 }

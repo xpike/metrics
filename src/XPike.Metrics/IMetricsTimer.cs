@@ -6,6 +6,8 @@ namespace XPike.Metrics
     public interface IMetricsTimer
         : IDisposable
     {
+        string Name { get; }
+
         IList<string> Tags { get; set; }
     }
 }

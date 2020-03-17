@@ -9,5 +9,11 @@
         /// The current Metrics Context for this async execution scope.
         /// </summary>
         IMetricsContext MetricsContext { get; }
+
+        IOperationTracker OperationTracker { get; }
+
+        void AddTracker(IOperationTracker tracker);
+
+        void RemoveTracker();
     }
 }
